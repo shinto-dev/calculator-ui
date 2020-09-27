@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Grid} from "semantic-ui-react";
+import {Form} from "semantic-ui-react";
 
 export default function CalculationForm({onSubmit}) {
     const [exp, setExp] = useState("")
@@ -10,22 +10,25 @@ export default function CalculationForm({onSubmit}) {
         setExp("");
     };
 
+    const handleChange = event => setExp(event.target.value);
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Grid columns={2}>
-                <Grid.Column width={10} stretched={true}>
-                    <input
-                        value={exp}
+        <React.Fragment>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group>
+                    <Form.Input
+                        type="text"
+                        // width={10}
+                        size={"massive"}
                         placeholder='Enter expression'
-                        onChange={(event) => setExp(event.target.value)}
+                        required
+                        value={exp}
+                        onChange={handleChange}
+                        pattern="\d+([\+\-\/\*]\d+)+"
                     />
-                    {/*<Input size={"large"} placeholder='Enter expression' value={exp}/>*/}
-                </Grid.Column>
-                <Grid.Column width={2}>
-                    <Button content='Submit'/>
-                </Grid.Column>
-            </Grid>
-        </form>
+                    <Form.Button content='Submit' />
+                </Form.Group>
+            </Form>
+        </React.Fragment>
     )
 }

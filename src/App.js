@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
-import {Container, Grid, Header} from 'semantic-ui-react'
+import {List, Container, Grid, Header} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import CalculationForm from "./CalculationForm";
 import CalculationList from "./CalculationList";
@@ -26,7 +26,10 @@ export default function App() {
 
     useEffect(() => {
         webSocket.current.onmessage = (evt) => {
-            setCalculations([evt.data, ...calculations].slice(0, 10))
+            setCalculations([{
+                value: evt.data,
+                time: new Date().toLocaleString()
+            }, ...calculations].slice(0, 10))
         };
     }, [calculations])
 
@@ -38,12 +41,20 @@ export default function App() {
     return (
         <div className="App">
             <Container>
-                <Header as='h1' textAlign={"left"}> Calculations </Header>
                 <Grid>
                     <Grid.Row>
                         <CalculationForm onSubmit={addNewCalculation}/>
                     </Grid.Row>
-                    <Grid.Row style={{height: 500}} color={"blue"}>
+                    <Grid.Row>
+                        <List bulleted>
+                            <List.Item> Supports only integers.</List.Item>
+                            <List.Item> Supported operations: +, -, /, *</List.Item>
+                        </List>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Header as={"h2"}>Last 10 calculations</Header>
+                    </Grid.Row>
+                    <Grid.Row style={{height: 500}}>
                         <CalculationList calculations={calculations}/>
                     </Grid.Row>
                 </Grid>
