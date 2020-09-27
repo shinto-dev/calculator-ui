@@ -48,6 +48,7 @@ export default function App() {
                         <List bulleted>
                             <List.Item> Supports only integers.</List.Item>
                             <List.Item> Supported operations: +, -, /, *</List.Item>
+                            <List.Item> Example: 5+3 </List.Item>
                         </List>
                     </Grid.Row>
                     <Grid.Row>
