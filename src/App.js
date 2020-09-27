@@ -17,8 +17,7 @@ export default function App() {
         }
 
         webSocket.current.onclose = () => {
-            console.log('disconnected') //todo: try to reconnect incase of connection loss
-
+            console.log('disconnected')
         }
         return () => webSocket.current.close();
     }, []);
