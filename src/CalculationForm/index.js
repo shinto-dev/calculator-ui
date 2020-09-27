@@ -24,7 +24,7 @@ export default function CalculationForm({onSubmit}) {
                         required
                         value={exp}
                         onChange={handleChange}
-                        pattern="\d+([\+\-\/\*]\d+)+"
+                        pattern="^(\d|[1-9][0-9]+)([\+\-\/\*](\d|[1-9][0-9]+))+$"
                     />
                     <Form.Button content='Submit' />
                 </Form.Group>
