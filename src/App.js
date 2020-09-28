@@ -1,40 +1,33 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import {List, Container, Grid, Header} from 'semantic-ui-react'
+import {Container, Grid, Header, List} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import CalculationForm from "./CalculationForm";
 import CalculationList from "./CalculationList";
+import {closeConnection, registerOnMessageCallback, sendMessage, startWebsocketConnection} from "./websocket";
 
 export default function App() {
     const [calculations, setCalculations] = useState([])
-    const webSocket = useRef({});
 
     useEffect(() => {
-        webSocket.current = new WebSocket("ws://localhost:8080/ws");
-
-        webSocket.current.onopen = () => {
-            console.log('connected')
-        }
-
-        webSocket.current.onclose = () => {
-            console.log('disconnected')
-        }
-        return () => webSocket.current.close();
+        startWebsocketConnection();
+        return () => closeConnection();
     }, []);
 
-
     useEffect(() => {
-        webSocket.current.onmessage = (evt) => {
+        const receiveNewCalculation = (data) => {
+            console.log(data)
             setCalculations([{
-                value: evt.data,
+                value: data,
                 time: new Date().toLocaleString()
             }, ...calculations].slice(0, 10))
-        };
+        }
+        registerOnMessageCallback(receiveNewCalculation)
     }, [calculations])
 
 
     const addNewCalculation = (expr) => {
-        webSocket.current.send(expr)
+        sendMessage(expr)
     }
 
     return (
